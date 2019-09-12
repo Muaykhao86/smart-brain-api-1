@@ -1,0 +1,39 @@
+version: '3'
+
+#UPDATE!!! S
+# SO I HAVE IT WORKING AND CAN ACCESS IT WITH ADDING ADMIN ETC TO POSTGRES CONTAINER
+# NOW I CANT ACCESS MY DB FOR ORIGINAL SMART BRAIN
+#ONWARDS AND UPWARDS
+
+  #Backend API
+services: 
+  smart-brain-api-1: 
+    container_name: backend
+    build: ./
+    command: npm start
+    working_dir: /usr/src/smart-brain-api-1
+    environment:
+      POSTGRES_USER: daniel
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: smart-brain-dock
+      POSTGRES_HOST: postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/smart-brain-api-1
+      
+
+
+  #POSTGRES
+  postgres:
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_URL: postgres://admin:secret@localhost:5432/smart-brain-dock
+      POSTGRES_DB: smart-brain-dock
+      POSTGRES_HOST: postgres
+    build: ./postgres
+    ports:
+      - "5432:5432"
+
+ 
