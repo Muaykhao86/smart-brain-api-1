@@ -1,9 +1,14 @@
-version: '3'
+version: '3.6'
 
-#UPDATE!!! S
-# SO I HAVE IT WORKING AND CAN ACCESS IT WITH ADDING ADMIN ETC TO POSTGRES CONTAINER
-# NOW I CANT ACCESS MY DB FOR ORIGINAL SMART BRAIN
-#ONWARDS AND UPWARDS
+# working but cannot connect with psequel, have to connect to db tables through
+
+# docker-compose down
+# docker-compose up --build
+# docker ps get postgres container id
+# docker exec -it ${id} bash
+# start the postgres server psql -U postgres // or psql smart-brain-dock daniel // psql database user // https://www.a2hosting.co.uk/kb/developer-corner/postgresql/connect-to-postgresql-from-the-command-line
+# connect to db \c smart-brain-dock
+# Thats it!!
 
   #Backend API
 services: 
@@ -13,10 +18,11 @@ services:
     command: npm start
     working_dir: /usr/src/smart-brain-api-1
     environment:
-      POSTGRES_USER: daniel
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: smart-brain-dock
-      POSTGRES_HOST: postgres
+      POSTGRES_URI: postgres://daniel:secret@postgres:5432/smart-brain-dock
+      REDIS_URI: redis://redis:6379
+    # links:
+    #   - postgres
+    #   - redis
     ports:
       - "3000:3000"
     volumes:
@@ -27,13 +33,17 @@ services:
   #POSTGRES
   postgres:
     environment:
-      POSTGRES_USER: admin
+      POSTGRES_USER: daniel
       POSTGRES_PASSWORD: secret
-      POSTGRES_URL: postgres://admin:secret@localhost:5432/smart-brain-dock
+      # POSTGRES_URL: postgres://daniel:secret@localhost:5432/smart-brain-dock
       POSTGRES_DB: smart-brain-dock
       POSTGRES_HOST: postgres
     build: ./postgres
     ports:
       - "5432:5432"
 
- 
+  #REDIS
+  redis:
+    image: redis
+    ports: 
+      - "6379:6379"
