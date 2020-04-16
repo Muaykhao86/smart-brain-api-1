@@ -1,1 +1,2 @@
-Face fixer 2.0
+My customized Face Fixer app
+Final project for Udemy course
